@@ -4,7 +4,7 @@ const buildThemesMenu = require("./themesMenu");
 const themeIcon = require("./themeIcon");
 
 exports = module.exports = (Menus) => ({
-  label: "Teams for Linux",
+  label: "Outlook for Linux",
   submenu: [
     {
       label: "Open",
@@ -12,23 +12,14 @@ exports = module.exports = (Menus) => ({
       click: () => Menus.open(),
     },
     {
-      label: "Join Meeting",
+      label: "New Email",
       accelerator: "ctrl+J",
-      click: () => Menus.joinMeeting(),
+      click: () => Menus.newEmail(),
     },
     {
-      label: "Return to Teams",
+      label: "Return to Outlook",
       click: () => Menus.returnToTeams(),
     },
-    ...(Menus.configGroup.startupConfig.quickChat?.enabled
-      ? [
-          {
-            label: "Quick Chat",
-            accelerator: Menus.configGroup.startupConfig.quickChat?.shortcut || undefined,
-            click: () => Menus.showQuickChat(),
-          },
-        ]
-      : []),
     {
       label: "Refresh",
       accelerator: "ctrl+R",

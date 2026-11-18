@@ -1,100 +1,81 @@
-# Teams for Linux
+# Outlook for Linux
 
-[![Matrix Space](https://img.shields.io/matrix/teams-for-linux-space%3Amatrix.org?server_fqdn=matrix.org&label=Matrix%20Space)](https://matrix.to/#/#teams-for-linux-space:matrix.org "Matrix Space")
-![](https://img.shields.io/github/release/IsmaelMartinez/teams-for-linux.svg?style=flat)
-![](https://img.shields.io/github/downloads/IsmaelMartinez/teams-for-linux/total.svg?style=flat)
-![Build & Release](https://github.com/IsmaelMartinez/teams-for-linux/workflows/Build%20&%20Release/badge.svg)
-![](https://img.shields.io/librariesio/github/IsmaelMartinez/teams-for-linux)
-[![Known Vulnerabilities](https://snyk.io//test/github/IsmaelMartinez/teams-for-linux/badge.svg?targetFile=package.json)](https://snyk.io//test/github/IsmaelMartinez/teams-for-linux?targetFile=package.json)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=IsmaelMartinez_teams-for-linux&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=IsmaelMartinez_teams-for-linux)
+An unofficial Linux desktop client for Outlook on the web, forked from
+[Teams for Linux](https://github.com/IsmaelMartinez/teams-for-linux).
 
-**Unofficial Microsoft Teams client for Linux** — a native desktop app that wraps the Teams web version with enhanced Linux integration.
+This fork is an initial adaptation of the original Electron application. It keeps
+the upstream architecture and build workflow, with changes focused on Outlook.
+It is not affiliated with or endorsed by Microsoft.
 
-✅ **System notifications**  
-✅ **System tray integration** (badge support varies by desktop environment)  
-✅ **Custom backgrounds & themes**  
-✅ **Screen sharing support**  
-✅ **Multiple account profiles**  
+## Current scope
 
-> [!NOTE]
-> This is an independent project, not affiliated with Microsoft. Some features are limited by the Teams web app.
+- Outlook web mail with Microsoft account authentication.
+- Outlook branding and a penguin icon derived from the upstream artwork.
+- The original application and tray menus, adapted with Outlook actions.
+- Inbox unread counts passed to the existing tray badge renderer.
+- Back and forward buttons beside the Outlook name, outside the search field.
+- The original **Choose App Icon** menu.
 
-## Sponsor
+This is a work in progress. Tray appearance depends on the desktop environment.
+Features inherited from Teams, including calls, presence, screen sharing, MQTT,
+Graph integration and multiple account profiles, have not been validated for
+Outlook. Their presence in the source or upstream documentation does not imply
+Outlook support.
 
-### Recall.ai — API for Meeting Recording and Transcription
-> If you're looking for a meeting recording API, consider checking out [Recall.ai](https://www.recall.ai/product/microsoft-teams-recording-api?utm_source=github&utm_medium=sponsorship&utm_campaign=ismaelmartinez-teams-for-linux), an API that records and transcribes Zoom, Google Meet, Microsoft Teams, in-person meetings, and more.
+## Run from source
 
-_This sponsorship helps support the ongoing development of teams-for-linux._
+Clone this fork and switch to its Outlook branch:
 
-## Installation
+```sh
+git clone --branch outlook https://github.com/fcrespo82/outlook-for-linux.git
+cd outlook-for-linux
+npm start -- --user-data-dir="$HOME/.config/outlook-for-linux"
+```
 
-### Package Repositories
+Node.js and npm are required. The original `prestart` script runs `npm ci` before
+launching Electron. The explicit user data directory keeps the development
+profile separate from other Electron applications. Reuse the same directory on
+subsequent launches to keep your login and settings.
 
-We have dedicated Debian/DEB and RHEL/Fedora/RPM repositories at https://teamsforlinux.de hosted with :heart: by [Nils Büchner](https://github.com/nbuechner). Please follow the installation instructions there.
+The default user-agent is Electron's native user-agent. Password sign-in was
+available with this identity during testing; the inherited Chrome-only override
+led to a blocked security-key/PIN sign-in flow with the tested work account.
+Other authentication methods remain unverified.
 
-### Distribution Packages
+## Build and checks
 
-[![AUR: teams-for-linux](https://img.shields.io/badge/AUR-teams--for--linux-blue.svg)](https://aur.archlinux.org/packages/teams-for-linux)
-[![Pacstall: teams-for-linux-deb](https://img.shields.io/badge/Pacstall-teams--for--linux--deb-00958C)](https://github.com/pacstall/pacstall-programs/tree/master/packages/teams-for-linux-deb)
-[![Vylen Linux: teams-for-linux](https://img.shields.io/badge/Vylen_Linux-teams--for--linux-green)](https://vylen.gitlab.io/packages/#teams-for-linux)  
-[![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/teams-for-linux)
-<a href='https://flathub.org/apps/details/com.github.IsmaelMartinez.teams_for_linux'><img width='170' alt='Download on Flathub' src='https://flathub.org/assets/badges/flathub-badge-en.png'/></a>
+The fork uses the upstream scripts:
 
-### Manual Download
+```sh
+npm run pack        # Unpacked application
+npm run dist:linux  # Linux packages
+npm run lint
+npm run test:unit
+```
 
-Download from [GitHub Releases](https://github.com/IsmaelMartinez/teams-for-linux/releases) — available as AppImage, deb, rpm, snap, tar.gz (plus Windows/macOS builds).
+These commands are inherited build and validation entry points, not a guarantee
+that every package format or inherited test currently passes for Outlook.
+The Teams for Linux package repositories, Flathub and Snap Store listings
+publish the upstream Teams application, not this Outlook fork.
 
-> [!TIP]
-> For AppImage files, use [`AppImageLauncher`](https://github.com/TheAssassin/AppImageLauncher) for better desktop integration.
+## Upstream and development
 
-## Quick Start
+The upstream source, history, credits and documentation remain available:
 
-1. **Install** using your preferred method above
-2. **Launch** with `teams-for-linux` 
-3. **Configure** by creating `~/.config/teams-for-linux/config.json` if needed
+- [Teams for Linux repository](https://github.com/IsmaelMartinez/teams-for-linux)
+- [Upstream documentation](https://ismaelmartinez.github.io/teams-for-linux/)
+- [Local development documentation](docs-site/docs/development/contributing.md)
+- [Configuration reference](docs-site/docs/configuration-generated.md)
+- [Contributing](CONTRIBUTING.md) and [project history](HISTORY.md)
 
-## Documentation
+Upstream guides describe Teams behavior. Outlook-specific behavior must be
+checked against this fork. Internal module and file names are kept where a
+rename is unnecessary; references to upstream services and past releases are
+not mechanically rewritten.
 
-📖 **[Complete Documentation](https://ismaelmartinez.github.io/teams-for-linux/)** — Enhanced documentation with search, mobile optimization, and comprehensive guides
+## License and artwork
 
-| Topic | Description |
-|-------|-------------|
-| **[Installation Guide](https://ismaelmartinez.github.io/teams-for-linux/installation)** | Package repositories and installation methods |
-| **[Configuration Guide](https://ismaelmartinez.github.io/teams-for-linux/configuration)** | Complete setup and configuration options |
-| **[Troubleshooting](https://ismaelmartinez.github.io/teams-for-linux/troubleshooting)** | Common issues and solutions |
-| **[Multiple Profiles](https://ismaelmartinez.github.io/teams-for-linux/multiple-instances)** | Running work & personal accounts |
-| **[Custom Backgrounds](https://ismaelmartinez.github.io/teams-for-linux/custom-backgrounds)** | Video call backgrounds setup |
-| **[Contributing](https://ismaelmartinez.github.io/teams-for-linux/development/contributing)** | Development setup and contribution guidelines |
-| **[Privacy & Data Protection](https://ismaelmartinez.github.io/teams-for-linux/privacy)** | What personal data the app does and does not handle |
-
-## Project Activity
-
-![Alt](https://repobeats.axiom.co/api/embed/e63dcc8b154ee5f4490674818df091c243b041b7.svg "Repobeats analytics image")
-
-## Support & Community
-
-- 💬 **Chat**: Join our [Matrix Space](https://matrix.to/#/#teams-for-linux-space:matrix.org)
-- 🐛 **Issues**: [Report bugs](https://github.com/IsmaelMartinez/teams-for-linux/issues)
-- 🤝 **Contributing**: See [`CONTRIBUTING.md`](CONTRIBUTING.md)
-
-## Security & Sandboxing
-
-Electron's contextIsolation and sandbox features are disabled to enable Teams DOM access functionality. For enhanced security, use system-level sandboxing:
-
-**Available options**:
-- **Flatpak**: Built-in isolation via Flathub
-- **Snap packages**: Application confinement with auto-updates
-- **Firejail**: Use this [script](https://codeberg.org/lars_uffmann/teams-for-linux-jailed) for manual sandboxing
-- **AppArmor/SELinux**: Most Linux distributions include these by default
-
-System-level sandboxing provides better isolation than Electron's built-in features while preserving full functionality.
-
-## History
-
-Read about the history of this project in the [`HISTORY.md`](HISTORY.md) file.
-
-## License
-
-**GPL-3.0** — See [`LICENSE.md`](LICENSE.md)
-
-Icons from [Icon Duck](https://iconduck.com/sets/hugeicons-essential-free-icons) (CC BY 4.0)
+[GPL-3.0-or-later](LICENSE.md). Original authorship and notices are retained.
+The Outlook penguin artwork is adapted from the original Teams for Linux artwork.
+Additional icons are from [Icon Duck](https://iconduck.com/sets/hugeicons-essential-free-icons)
+(CC BY 4.0).

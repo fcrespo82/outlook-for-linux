@@ -13,9 +13,9 @@
 
 // Schemes the app asks the OS to route to it. Keep in step with
 // `build.protocols.schemes` in package.json.
-const PROTOCOL_SCHEMES = ["msteams", "web+msteams"];
+const PROTOCOL_SCHEMES = ["outlook", "web+outlook"];
 
-const WEB_PREFIX = /^web\+(?=msteams:)/i;
+const WEB_PREFIX = /^web\+(?=outlook:)/i;
 
 /**
  * Rewrites a `web+msteams:` launch argument to its `msteams:` equivalent.
@@ -35,14 +35,14 @@ function stripWebPrefix(arg) {
  * meetings, and channels.
  *
  * @param {string[]} args - Command line arguments to process
- * @param {{msTeamsProtocols: {v1: string, v2: string}, meetupJoinRegEx: string, url: string}} config
+ * @param {{msOutlookProtocols: {v1: string, v2: string}, meetupJoinRegEx: string, url: string}} config
  * @returns {string|null} URL to navigate to, or null if no argument is a Teams link
  */
 function resolveLaunchUrl(args, config) {
   // Legacy Teams protocol format: msteams:/l/meetup-join/...
-  const v1msTeams = new RegExp(config.msTeamsProtocols.v1);
+  const v1outlook = new RegExp(config.msOutlookProtocols.v1);
   // Modern Teams protocol format: msteams://teams.microsoft.com/l/...
-  const v2msTeams = new RegExp(config.msTeamsProtocols.v2);
+  const v2outlook = new RegExp(config.msOutlookProtocols.v2);
   const meetupJoin = new RegExp(config.meetupJoinRegEx);
   for (const rawArg of args) {
     // The launcher may use `web+msteams:` in place of `msteams:`.
@@ -52,11 +52,11 @@ function resolveLaunchUrl(args, config) {
       console.debug("A url argument received with https protocol");
       return arg;
     }
-    if (v1msTeams.test(arg)) {
+    if (v1outlook.test(arg)) {
       console.debug("A url argument received with msteams v1 protocol");
       return config.url + arg.substring(8, arg.length);
     }
-    if (v2msTeams.test(arg)) {
+    if (v2outlook.test(arg)) {
       console.debug("A url argument received with msteams v2 protocol");
       return arg.replace("msteams", "https");
     }

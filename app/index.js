@@ -51,7 +51,7 @@ const isMac = os.platform() === "darwin";
 // existing installs would silently switch config directory.
 if (process.platform === "linux") {
   const userDataPath = app.getPath("userData");
-  app.setName("Teams for Linux");
+  app.setName("Outlook for Linux");
   app.setPath("userData", userDataPath);
 
   // The desktop-entry hint must be set unconditionally: Electron pre-sets
@@ -61,9 +61,9 @@ if (process.platform === "linux") {
   if (process.env.FLATPAK_ID) {
     app.setDesktopName(`${process.env.FLATPAK_ID}.desktop`);
   } else if (process.env.SNAP_INSTANCE_NAME) {
-    app.setDesktopName(`${process.env.SNAP_INSTANCE_NAME}_teams-for-linux.desktop`);
+    app.setDesktopName(`${process.env.SNAP_INSTANCE_NAME}_outlook-for-linux.desktop`);
   } else {
-    app.setDesktopName("teams-for-linux.desktop");
+    app.setDesktopName("outlook-for-linux.desktop");
   }
 }
 

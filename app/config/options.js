@@ -26,6 +26,10 @@
 // defaults.js is a pure data module (no Electron imports), so requiring it here
 // keeps options.js loadable by the generator outside Electron.
 const defaults = require("./defaults");
+// Keep generators and Node tests independent of the Electron runtime.
+const nativeUserAgent = process.versions.electron
+  ? require("electron").app.userAgentFallback
+  : "";
 
 module.exports = {
       dbusControl: {
@@ -137,8 +141,8 @@ module.exports = {
         deprecated: "use idleDetection.checkInterval.detectIdle instead",
       },
       appTitle: {
-        default: "Microsoft Teams",
-        describe: "Replaces 'Microsoft Teams' in the window title (when changed from the default) and is used as the tray tooltip",
+        default: "Microsoft Outlook",
+        describe: "Replaces 'Microsoft Outlook' in the window title (when changed from the default) and is used as the tray tooltip",
         type: "string",
         applyMode: "restart",
         deprecated: "use app.title instead",
@@ -207,8 +211,8 @@ module.exports = {
         applyMode: "restart",
       },
       chromeUserAgent: {
-        default: `Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/${process.versions.chrome} Safari/537.36`,
-        describe: "Google Chrome User Agent",
+        default: nativeUserAgent,
+        describe: "User-agent override. Defaults to the native Electron user-agent.",
         type: "string",
         applyMode: "restart",
         deprecated: "use platform.chromeUserAgent instead",
@@ -765,7 +769,7 @@ module.exports = {
         deprecated: "use urlHandling.openMeetupJoinInApp instead",
       },
       partition: {
-        default: "persist:teams-4-linux",
+        default: "persist:outlook-4-linux",
         describe: "BrowserWindow webpreferences partition",
         type: "string",
         applyMode: "restart",
@@ -849,31 +853,31 @@ module.exports = {
         applyMode: "restart",
         deprecated: "use tray.enabled instead",
       },
-      msTeamsProtocols: {
+      msOutlookProtocols: {
         default: {
-          v1: "^msteams:/(?:meet/|l/(?:app|call|channel|chat|entity|file|meet(?:ing|up-join)|message|task|team)/)",
-          v2: String.raw`^msteams://teams\.(?:microsoft\.com|live\.com|cloud\.microsoft)/(?:meet/|l/(?:app|call|channel|chat|entity|file|meet(?:ing|up-join)|message|task|team)/)`,
+          v1: "(?!)",
+          v2: String.raw`^https://outlook\.(?:office\.com|office365\.com|cloud\.microsoft|live\.com)/(?:mail|calendar|owa)(?:[/?#]|$)`,
         },
         describe:
-          "Regular expressions for Microsoft Teams protocol links (v1 and v2).",
+          "Outlook on the web URL patterns. The legacy protocol conversion is disabled; HTTPS links are opened unchanged.",
         type: "object",
         fields: {
           "v1": {
             type: "string",
             describe:
-              "Regular expression matching legacy msteams: scheme protocol links.",
+              "Disabled: the inherited legacy protocol conversion does not apply to Outlook on the web.",
           },
           "v2": {
             type: "string",
             describe:
-              "Regular expression matching host-based msteams:// scheme protocol links.",
+              "HTTPS Outlook mail, calendar and OWA links accepted without conversion. Does not handle mailto links.",
           },
         },
         applyMode: "restart",
       },
       url: {
-        default: "https://teams.cloud.microsoft",
-        describe: "Microsoft Teams URL",
+        default: "https://outlook.office.com/mail/",
+        describe: "Microsoft Outlook URL",
         type: "string",
         applyMode: "restart",
         deprecated: "use app.url instead",
@@ -1477,10 +1481,8 @@ module.exports = {
       },
       platform: {
         default: {
-          // Same template literal as the flat chromeUserAgent above, not a
-          // copy of its evaluated value: process.versions.chrome is undefined
-          // outside Electron, so a frozen string would ship Chrome/undefined.
-          chromeUserAgent: `Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/${process.versions.chrome} Safari/537.36`,
+          // Use the same native browser identity as the flat option above.
+          chromeUserAgent: nativeUserAgent,
           emulateWindowsChromium: false,
           spellCheckerLanguages: [],
           disableTimestampOnCopy: false,
@@ -1491,7 +1493,7 @@ module.exports = {
         fields: {
           "chromeUserAgent": {
             type: "string",
-            describe: "Google Chrome User Agent",
+            describe: "User-agent override. Defaults to the native Electron user-agent.",
           },
           "emulateWindowsChromium": {
             type: "boolean",
@@ -1510,9 +1512,9 @@ module.exports = {
       },
       app: {
         default: {
-          title: "Microsoft Teams",
-          url: "https://teams.cloud.microsoft",
-          partition: "persist:teams-4-linux",
+          title: "Microsoft Outlook",
+          url: "https://outlook.office.com/mail/",
+          partition: "persist:outlook-4-linux",
         },
         describe:
           "Core application identity and the Teams URL it loads. Replaces the deprecated appTitle, url and partition options.",
@@ -1520,11 +1522,11 @@ module.exports = {
         fields: {
           "title": {
             type: "string",
-            describe: "Replaces 'Microsoft Teams' in the window title (when changed from the default) and is used as the tray tooltip",
+            describe: "Replaces 'Microsoft Outlook' in the window title (when changed from the default) and is used as the tray tooltip",
           },
           "url": {
             type: "string",
-            describe: "Microsoft Teams URL",
+            describe: "Microsoft Outlook URL",
           },
           "partition": {
             type: "string",

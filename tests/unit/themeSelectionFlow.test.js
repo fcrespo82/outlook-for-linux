@@ -211,7 +211,7 @@ function assertSavedAndAttached(context, original) {
   });
   assert.deepStrictEqual(context.configuration.themeSelection, { cssName: "custom:glass-dark", cssLocation: "" });
   assert.deepStrictEqual(checkedLabels(context), ["Glass Dark"]);
-  assert.strictEqual(context.window.menu.items[0].label, "Teams for Linux");
+  assert.strictEqual(context.window.menu.items[0].label, "Outlook for Linux");
   assert.strictEqual(context.window.setMenu.mock.callCount(), 2);
   assert.strictEqual(context.window.setMenu.mock.calls[1].arguments[0], context.window.menu);
   assert.strictEqual(dialog.showErrorBox.mock.callCount(), 0);
@@ -223,7 +223,7 @@ function assertRestartPrompt(context, parent, options) {
   assert.deepStrictEqual(options, {
     type: "info",
     title: "Theme saved",
-    message: "Restart Teams for Linux to apply the selected theme.",
+    message: "Restart Outlook for Linux to apply the selected theme.",
     buttons: ["Restart now", "Later"],
     defaultId: 0,
     cancelId: 1,

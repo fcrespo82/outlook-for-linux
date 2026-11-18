@@ -17,12 +17,12 @@ For configuration examples, file locations, and platform-specific notes, see the
 | `appIconType` | `string` | `"default"` | Type of tray icon to be used **Deprecated:** use tray.iconType instead | `restart` |
 | `appIdleTimeout` | `number` | `300` | A numeric value in seconds as duration before app considers the system as idle **Deprecated:** use idleDetection.timeout instead | `restart` |
 | `appIdleTimeoutCheckInterval` | `number` | `10` | A numeric value in seconds as poll interval to check if the appIdleTimeout is reached **Deprecated:** use idleDetection.checkInterval.detectIdle instead | `restart` |
-| `appTitle` | `string` | `"Microsoft Teams"` | Replaces 'Microsoft Teams' in the window title (when changed from the default) and is used as the tray tooltip **Deprecated:** use app.title instead | `restart` |
+| `appTitle` | `string` | `"Microsoft Outlook"` | Replaces 'Microsoft Outlook' in the window title (when changed from the default) and is used as the tray tooltip **Deprecated:** use app.title instead | `restart` |
 | `alwaysOnTop` | `boolean` | `true` | Keep the pop-out window always on top of other windows. **Deprecated:** use window.alwaysOnTop instead | `restart` |
 | `authServerWhitelist` | `string` | `"*"` | Set auth-server-whitelist value **Deprecated:** use auth.serverWhitelist instead | `restart` |
 | `awayOnSystemIdle` | `boolean` | `false` | Sets the user status as away when system goes idle **Deprecated:** use idleDetection.setAwayOnIdle instead | `restart` |
 | `idleDetection` | `object` | `{"forceState":false,"stateFile":"/tmp/teams-for-linux-idle-state-$USER","setAwayOnIdle":false,"timeout":300,"checkInterval":{"detectIdle":10,"detectActive":2}}` | Idle detection configuration. forceState: enables state file-based idle control (workaround for Wayland/Hyprland). stateFile: path to state file with $USER expansion support. setAwayOnIdle, timeout and checkInterval replace the deprecated awayOnSystemIdle, appIdleTimeout, appIdleTimeoutCheckInterval and appActiveCheckInterval options. | `restart` |
-| `chromeUserAgent` | `string` | `"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/<version> Safari/537.36"` | Google Chrome User Agent **Deprecated:** use platform.chromeUserAgent instead | `restart` |
+| `chromeUserAgent` | `string` | `""` | User-agent override. Defaults to the native Electron user-agent. **Deprecated:** use platform.chromeUserAgent instead | `restart` |
 | `customBGServiceBaseUrl` | `string` | `"http://localhost"` | Base URL of the server which provides custom background images **Deprecated:** use customBackground.serviceBaseUrl instead | `restart` |
 | `customBGServiceConfigFetchInterval` | `number` | `0` | A numeric value in seconds as poll interval to download background service config download **Deprecated:** use customBackground.configFetchInterval instead | `restart` |
 | `customCACertsFingerprints` | `array` | `[]` | Array of custom CA Certs Fingerprints to allow SSL unrecognized signer or self signed certificate **Deprecated:** use auth.customCACertificateFingerprints instead | `restart` |
@@ -64,15 +64,15 @@ For configuration examples, file locations, and platform-specific notes, see the
 | `notificationMethod` | `string` | `"web"` | Notification method to be used by the application (web/electron/custom) **Deprecated:** use notifications.method instead | `restart` |
 | `customNotification` | `object` | `{"toastDuration":5000,"width":360,"height":110,"position":"bottomRight","margin":0,"backgroundColor":"#2D2D2D","hoverBackgroundColor":"#3A3A3A","titleColor":"#FFFFFF","textColor":"#D1D1D1","titleFontSize":14,"bodyFontSize":13}` | Custom in-app notification system configuration | `restart` |
 | `onNewWindowOpenMeetupJoinUrlInApp` | `boolean` | `true` | Open meetupJoinRegEx URLs in the app instead of the default browser **Deprecated:** use urlHandling.openMeetupJoinInApp instead | `restart` |
-| `partition` | `string` | `"persist:teams-4-linux"` | BrowserWindow webpreferences partition **Deprecated:** use app.partition instead | `restart` |
+| `partition` | `string` | `"persist:outlook-4-linux"` | BrowserWindow webpreferences partition **Deprecated:** use app.partition instead | `restart` |
 | `proxyServer` | `string` | `null` | Proxy Server with format address:port **Deprecated:** use network.proxyServer instead | `restart` |
 | `network` | `object` | `{"webRTCIPHandlingPolicy":null,"disableQuic":true,"proxyServer":null}` | Network configuration. webRTCIPHandlingPolicy: WebRTC IP handling policy to control which network interfaces are used for ICE candidates. Use 'default_public_interface_only' to prevent WebRTC from advertising interfaces that have no internet route (e.g. a secondary ethernet adapter), which can cause calls to drop to OnHold due to asymmetric STUN routing. Valid values: 'default', 'default_public_and_private_interfaces', 'default_public_interface_only', 'disable_non_proxied_udp'. Disabled by default (opt-in). disableQuic: Append Chromium's --disable-quic switch at startup. Defaults to true to work around issue #2518 (concurrent SharePoint downloads abort with ERR_QUIC_PROTOCOL_ERROR on the shared QUIC session). Set to false to re-enable QUIC if a future Chromium release fixes the underlying transport bug. proxyServer: proxy server with format address:port, replacing the deprecated proxyServer option. | `restart` |
 | `spellCheckerLanguages` | `array` | `[]` | Array of languages to use with Electron's spell checker (experimental) **Deprecated:** use platform.spellCheckerLanguages instead | `restart` |
 | `ssoBasicAuthUser` | `string` | `""` | User to use for SSO basic auth. **Deprecated:** use auth.basic.user instead | `restart` |
 | `ssoBasicAuthPasswordCommand` | `string` | `""` | Command to execute to retrieve password for SSO basic auth. **Deprecated:** use auth.basic.passwordCommand instead | `restart` |
 | `trayIconEnabled` | `boolean` | `true` | Enable tray icon **Deprecated:** use tray.enabled instead | `restart` |
-| `msTeamsProtocols` | `object` | `{"v1":"^msteams:/(?:meet/\|l/(?:app\|call\|channel\|chat\|entity\|file\|meet(?:ing\|up-join)\|message\|task\|team)/)","v2":"^msteams://teams\\.(?:microsoft\\.com\|live\\.com\|cloud\\.microsoft)/(?:meet/\|l/(?:app\|call\|channel\|chat\|entity\|file\|meet(?:ing\|up-join)\|message\|task\|team)/)"}` | Regular expressions for Microsoft Teams protocol links (v1 and v2). | `restart` |
-| `url` | `string` | `"https://teams.cloud.microsoft"` | Microsoft Teams URL **Deprecated:** use app.url instead | `restart` |
+| `msOutlookProtocols` | `object` | `{"v1":"(?!)","v2":"^https://outlook\\.(?:office\\.com\|office365\\.com\|cloud\\.microsoft\|live\\.com)/(?:mail\|calendar\|owa)(?:[/?#]\|$)"}` | Outlook on the web URL patterns. The legacy protocol conversion is disabled; HTTPS links are opened unchanged. | `restart` |
+| `url` | `string` | `"https://outlook.office.com/mail/"` | Microsoft Outlook URL **Deprecated:** use app.url instead | `restart` |
 | `useMutationTitleLogic` | `boolean` | `true` | Use MutationObserver to update counter from title **Deprecated:** use tray.useMutationTitleLogic instead | `restart` |
 | `watchConfigFile` | `boolean` | `false` | Watch for changes in the config file and reload the app **Deprecated:** use development.watchConfigFile instead | `restart` |
 | `webDebug` | `boolean` | `false` | Enable debug at start **Deprecated:** use development.webDebug instead | `restart` |
@@ -89,8 +89,8 @@ For configuration examples, file locations, and platform-specific notes, see the
 | `urlHandling` | `object` | `{"defaultHandler":"","meetupJoinRegEx":"^https://teams\\.(?:microsoft\\.com\|live\\.com\|cloud\\.microsoft)/(v2/\\?meetingjoin=\|meet/\|l/(?:app\|call\|channel\|chat\|entity\|file\|meet(?:ing\|up-join)\|message\|task\|team)/)","openMeetupJoinInApp":true}` | How the app decides which URLs it opens itself and which it hands to the desktop. Replaces the deprecated defaultURLHandler, meetupJoinRegEx and onNewWindowOpenMeetupJoinUrlInApp options. | `restart` |
 | `incomingCalls` | `object` | `{"toast":false,"command":null,"commandArgs":[]}` | Incoming call notification and external command configuration. Replaces the deprecated enableIncomingCallToast, incomingCallCommand and incomingCallCommandArgs options. | `restart` |
 | `appearance` | `object` | `{"cssName":"","cssLocation":"","followSystemTheme":false}` | Custom CSS and theme configuration. Replaces the deprecated customCSSName, customCSSLocation and followSystemTheme options. | `restart` |
-| `platform` | `object` | `{"chromeUserAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/<version> Safari/537.36","emulateWindowsChromium":false,"spellCheckerLanguages":[],"disableTimestampOnCopy":false}` | Platform emulation and OS integration configuration. Replaces the deprecated chromeUserAgent, emulateWinChromiumPlatform, spellCheckerLanguages and disableTimestampOnCopy options. | `restart` |
-| `app` | `object` | `{"title":"Microsoft Teams","url":"https://teams.cloud.microsoft","partition":"persist:teams-4-linux"}` | Core application identity and the Teams URL it loads. Replaces the deprecated appTitle, url and partition options. | `restart` |
+| `platform` | `object` | `{"chromeUserAgent":"","emulateWindowsChromium":false,"spellCheckerLanguages":[],"disableTimestampOnCopy":false}` | Platform emulation and OS integration configuration. Replaces the deprecated chromeUserAgent, emulateWinChromiumPlatform, spellCheckerLanguages and disableTimestampOnCopy options. | `restart` |
+| `app` | `object` | `{"title":"Microsoft Outlook","url":"https://outlook.office.com/mail/","partition":"persist:outlook-4-linux"}` | Core application identity and the Teams URL it loads. Replaces the deprecated appTitle, url and partition options. | `restart` |
 | `window` | `object` | `{"frame":true,"titleBar":"system","menubar":"auto","minimized":false,"closeOnCross":false,"minimizeOnClose":false,"alwaysOnTop":true,"class":null}` | Main window geometry, decoration and close behaviour. Replaces the deprecated frame, menubar, minimized, closeAppOnCross, minimizeOnClose, alwaysOnTop and class options. | `restart` |
 | `tray` | `object` | `{"enabled":true,"icon":"","iconType":"default","useMutationTitleLogic":true}` | Tray icon configuration. Replaces the deprecated trayIconEnabled, appIcon, appIconType and useMutationTitleLogic options. | `restart` |
 | `performance` | `object` | `{"disableGpu":false,"electronCLIFlags":[]}` | GPU and Chromium startup flag configuration. Replaces the deprecated disableGpu and electronCLIFlags options. | `restart` |
@@ -203,12 +203,12 @@ Object options group several related settings. The tables below list each nested
 | `network.disableQuic` | `boolean` | `true` | Append Chromium's --disable-quic switch at startup to work around QUIC protocol errors (issue #2518). |
 | `network.proxyServer` | `string` | `null` | Proxy Server with format address:port |
 
-### msTeamsProtocols
+### msOutlookProtocols
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `msTeamsProtocols.v1` | `string` | `"^msteams:/(?:meet/\|l/(?:app\|call\|channel\|chat\|entity\|file\|meet(?:ing\|up-join)\|message\|task\|team)/)"` | Regular expression matching legacy msteams: scheme protocol links. |
-| `msTeamsProtocols.v2` | `string` | `"^msteams://teams\\.(?:microsoft\\.com\|live\\.com\|cloud\\.microsoft)/(?:meet/\|l/(?:app\|call\|channel\|chat\|entity\|file\|meet(?:ing\|up-join)\|message\|task\|team)/)"` | Regular expression matching host-based msteams:// scheme protocol links. |
+| `msOutlookProtocols.v1` | `string` | `"(?!)"` | Disabled: the inherited legacy protocol conversion does not apply to Outlook on the web. |
+| `msOutlookProtocols.v2` | `string` | `"^https://outlook\\.(?:office\\.com\|office365\\.com\|cloud\\.microsoft\|live\\.com)/(?:mail\|calendar\|owa)(?:[/?#]\|$)"` | HTTPS Outlook mail, calendar and OWA links accepted without conversion. Does not handle mailto links. |
 
 ### media
 
@@ -352,7 +352,7 @@ Object options group several related settings. The tables below list each nested
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `platform.chromeUserAgent` | `string` | `"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/<version> Safari/537.36"` | Google Chrome User Agent |
+| `platform.chromeUserAgent` | `string` | `""` | User-agent override. Defaults to the native Electron user-agent. |
 | `platform.emulateWindowsChromium` | `boolean` | `false` | Use windows platform information in chromium. This is helpful if MFA app does not support Linux. |
 | `platform.spellCheckerLanguages` | `array` | `[]` | Array of languages to use with Electron's spell checker (experimental) |
 | `platform.disableTimestampOnCopy` | `boolean` | `false` | Controls whether timestamps are included when copying messages in chats |
@@ -361,9 +361,9 @@ Object options group several related settings. The tables below list each nested
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `app.title` | `string` | `"Microsoft Teams"` | Replaces 'Microsoft Teams' in the window title (when changed from the default) and is used as the tray tooltip |
-| `app.url` | `string` | `"https://teams.cloud.microsoft"` | Microsoft Teams URL |
-| `app.partition` | `string` | `"persist:teams-4-linux"` | BrowserWindow webpreferences partition |
+| `app.title` | `string` | `"Microsoft Outlook"` | Replaces 'Microsoft Outlook' in the window title (when changed from the default) and is used as the tray tooltip |
+| `app.url` | `string` | `"https://outlook.office.com/mail/"` | Microsoft Outlook URL |
+| `app.partition` | `string` | `"persist:outlook-4-linux"` | BrowserWindow webpreferences partition |
 
 ### window
 

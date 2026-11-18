@@ -132,7 +132,7 @@ class Menus {
 
   about() {
     const appInfo = [];
-    appInfo.push(`teams-for-linux@${app.getVersion()}\n`);
+    appInfo.push(`outlook-for-linux@${app.getVersion()}\n`);
     for (const prop in process.versions) {
       if (
         prop === "node" ||
@@ -579,7 +579,7 @@ class Menus {
       const { response } = await dialog.showMessageBox(this.window, {
         type: "info",
         title: "Theme saved",
-        message: "Restart Teams for Linux to apply the selected theme.",
+        message: "Restart Outlook for Linux to apply the selected theme.",
         buttons: ["Restart now", "Later"],
         defaultId: 0,
         cancelId: 1,
@@ -736,56 +736,15 @@ class Menus {
     this.window.webContents.executeJavaScript(script, true);
   }
 
-  async joinMeeting() {
-    let clipboardText = '';
-    try {
-      // Electron 44 moved the clipboard module onto the W3C Clipboard API, so
-      // readText() resolves rather than returns.
-      clipboardText = await clipboard.readText();
-    } catch (error) {
-      console.error('Error reading clipboard:', error);
-    }
-
-    this.joinMeetingDialog.show(clipboardText, (meetingUrl) => {
-      this.joinMeetingWithUrl(meetingUrl);
-    });
-  }
-
-  async joinMeetingWithUrl(meetingUrl) {
-    try {
-      // Validate the incoming URL up front so a parse failure or a
-      // non-matching URL falls through to the outer catch rather than
-      // ending up assigned raw inside the Teams window.
-      const parsed = new URL(meetingUrl);
-      if (!this.#isMeetingUrl(meetingUrl)) {
-        throw new Error('Not a recognised meeting URL');
-      }
-
-      // Snapshot the current Teams URL so the user can jump back after the
-      // meeting ends (see #2322). Skip the snapshot if we're already on a
-      // meeting URL (e.g. a prior takeover page) so repeat joins don't
-      // overwrite the last known good Teams location.
-      const currentUrl = this.window.webContents.getURL();
-      if (!this.#isMeetingUrl(currentUrl)) {
-        this.#preJoinUrl = currentUrl;
-      }
-
-      // Navigate inside the loaded Teams SPA (same-origin) so the app shell
-      // is preserved when the org allows authenticated join. Only rewrite
-      // to the current origin when the current page is actually on a Teams
-      // host; otherwise (login page, error page) navigate to the URL as-is.
-      const target = this.#isValidTeamsUrl(currentUrl)
-        ? new URL(currentUrl).origin + parsed.pathname + parsed.search + parsed.hash
-        : parsed.href;
-      const script = `window.location.assign(${JSON.stringify(target)});`;
-      this.window.show();
-      this.window.focus();
-      await this.window.webContents.executeJavaScript(script, true);
-    } catch {
-      // Avoid logging the error object: URL query parameters may contain tokens.
-      console.error('[JOIN_MEETING] Failed to navigate to meeting URL');
-      dialog.showErrorBox('Error', 'Failed to join meeting. Please check the URL.');
-    }
+  async newEmail() {
+    this.open();
+    await this.window.webContents.executeJavaScript(`(() => {
+      const editor = document.querySelector('[contenteditable="true"][role="textbox"]');
+      const button = [...document.querySelectorAll('button')].find(element =>
+        ['Novo', 'New', 'New mail', 'New email'].includes(element.getAttribute('aria-label')));
+      if (editor) editor.focus();
+      else if (button) button.click();
+    })()`);
   }
 
   async returnToTeams() {
@@ -801,18 +760,7 @@ class Menus {
       });
     } catch {
       console.error('[RETURN_TO_TEAMS] Navigation failed');
-      dialog.showErrorBox('Error', 'Failed to return to Teams.');
-    }
-  }
-
-  #isMeetingUrl(url) {
-    if (!url || typeof url !== 'string') return false;
-    const pattern = this.configGroup.startupConfig.meetupJoinRegEx;
-    if (!pattern) return false;
-    try {
-      return new RegExp(pattern).test(url);
-    } catch {
-      return false;
+      dialog.showErrorBox('Error', 'Failed to return to Outlook.');
     }
   }
 

@@ -137,8 +137,8 @@
     {
       "name": "appTitle",
       "type": "string",
-      "default": "Microsoft Teams",
-      "description": "Replaces 'Microsoft Teams' in the window title (when changed from the default) and is used as the tray tooltip",
+      "default": "Microsoft Outlook",
+      "description": "Replaces 'Microsoft Outlook' in the window title (when changed from the default) and is used as the tray tooltip",
       "applyMode": "restart",
       "deprecated": "use app.title instead"
     },
@@ -223,8 +223,8 @@
     {
       "name": "chromeUserAgent",
       "type": "string",
-      "default": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/<version> Safari/537.36",
-      "description": "Google Chrome User Agent",
+      "default": "",
+      "description": "User-agent override. Defaults to the native Electron user-agent.",
       "applyMode": "restart",
       "deprecated": "use platform.chromeUserAgent instead"
     },
@@ -878,7 +878,7 @@
     {
       "name": "partition",
       "type": "string",
-      "default": "persist:teams-4-linux",
+      "default": "persist:outlook-4-linux",
       "description": "BrowserWindow webpreferences partition",
       "applyMode": "restart",
       "deprecated": "use app.partition instead"
@@ -961,34 +961,34 @@
       "deprecated": "use tray.enabled instead"
     },
     {
-      "name": "msTeamsProtocols",
+      "name": "msOutlookProtocols",
       "type": "object",
       "default": {
-        "v1": "^msteams:/(?:meet/|l/(?:app|call|channel|chat|entity|file|meet(?:ing|up-join)|message|task|team)/)",
-        "v2": "^msteams://teams\\.(?:microsoft\\.com|live\\.com|cloud\\.microsoft)/(?:meet/|l/(?:app|call|channel|chat|entity|file|meet(?:ing|up-join)|message|task|team)/)"
+        "v1": "(?!)",
+        "v2": "^https://outlook\\.(?:office\\.com|office365\\.com|cloud\\.microsoft|live\\.com)/(?:mail|calendar|owa)(?:[/?#]|$)"
       },
-      "description": "Regular expressions for Microsoft Teams protocol links (v1 and v2).",
+      "description": "Outlook on the web URL patterns. The legacy protocol conversion is disabled; HTTPS links are opened unchanged.",
       "applyMode": "restart",
       "fields": [
         {
           "path": "v1",
           "type": "string",
-          "default": "^msteams:/(?:meet/|l/(?:app|call|channel|chat|entity|file|meet(?:ing|up-join)|message|task|team)/)",
-          "description": "Regular expression matching legacy msteams: scheme protocol links."
+          "default": "(?!)",
+          "description": "Disabled: the inherited legacy protocol conversion does not apply to Outlook on the web."
         },
         {
           "path": "v2",
           "type": "string",
-          "default": "^msteams://teams\\.(?:microsoft\\.com|live\\.com|cloud\\.microsoft)/(?:meet/|l/(?:app|call|channel|chat|entity|file|meet(?:ing|up-join)|message|task|team)/)",
-          "description": "Regular expression matching host-based msteams:// scheme protocol links."
+          "default": "^https://outlook\\.(?:office\\.com|office365\\.com|cloud\\.microsoft|live\\.com)/(?:mail|calendar|owa)(?:[/?#]|$)",
+          "description": "HTTPS Outlook mail, calendar and OWA links accepted without conversion. Does not handle mailto links."
         }
       ]
     },
     {
       "name": "url",
       "type": "string",
-      "default": "https://teams.cloud.microsoft",
-      "description": "Microsoft Teams URL",
+      "default": "https://outlook.office.com/mail/",
+      "description": "Microsoft Outlook URL",
       "applyMode": "restart",
       "deprecated": "use app.url instead"
     },
@@ -1700,7 +1700,7 @@
       "name": "platform",
       "type": "object",
       "default": {
-        "chromeUserAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/<version> Safari/537.36",
+        "chromeUserAgent": "",
         "emulateWindowsChromium": false,
         "spellCheckerLanguages": [],
         "disableTimestampOnCopy": false
@@ -1711,8 +1711,8 @@
         {
           "path": "chromeUserAgent",
           "type": "string",
-          "default": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/<version> Safari/537.36",
-          "description": "Google Chrome User Agent"
+          "default": "",
+          "description": "User-agent override. Defaults to the native Electron user-agent."
         },
         {
           "path": "emulateWindowsChromium",
@@ -1738,9 +1738,9 @@
       "name": "app",
       "type": "object",
       "default": {
-        "title": "Microsoft Teams",
-        "url": "https://teams.cloud.microsoft",
-        "partition": "persist:teams-4-linux"
+        "title": "Microsoft Outlook",
+        "url": "https://outlook.office.com/mail/",
+        "partition": "persist:outlook-4-linux"
       },
       "description": "Core application identity and the Teams URL it loads. Replaces the deprecated appTitle, url and partition options.",
       "applyMode": "restart",
@@ -1748,19 +1748,19 @@
         {
           "path": "title",
           "type": "string",
-          "default": "Microsoft Teams",
-          "description": "Replaces 'Microsoft Teams' in the window title (when changed from the default) and is used as the tray tooltip"
+          "default": "Microsoft Outlook",
+          "description": "Replaces 'Microsoft Outlook' in the window title (when changed from the default) and is used as the tray tooltip"
         },
         {
           "path": "url",
           "type": "string",
-          "default": "https://teams.cloud.microsoft",
-          "description": "Microsoft Teams URL"
+          "default": "https://outlook.office.com/mail/",
+          "description": "Microsoft Outlook URL"
         },
         {
           "path": "partition",
           "type": "string",
-          "default": "persist:teams-4-linux",
+          "default": "persist:outlook-4-linux",
           "description": "BrowserWindow webpreferences partition"
         }
       ]

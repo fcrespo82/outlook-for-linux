@@ -132,3 +132,34 @@ describe('trayIconRenderer appIcon config changes', () => {
     }
   });
 });
+
+// Outlook changes only the source of the unread-count event, not its renderer.
+it('feeds Outlook Inbox counts, zero and missing folders through unread-count', () => {
+  const fs = require('node:fs');
+  const vm = require('node:vm');
+  for (const [text, expected] of [
+    ['Caixa de Entrada79não lidas', 79], ['Inbox 4 unread', 4],
+    ['Inbox', 0], [null, undefined],
+  ]) {
+    let callback;
+    const counts = [];
+    const context = {
+      module: { exports: {} }, location: { hostname: 'outlook.cloud.microsoft' },
+      document: {
+        readyState: 'complete', title: 'Outlook', head: {}, documentElement: {},
+        querySelector: () => null,
+        querySelectorAll: () => text === null ? [] : [{ getAttribute: () => 'inbox', textContent: text }] },
+      MutationObserver: class { constructor(handler) { callback = handler; } observe() {} },
+      CustomEvent: class { constructor(type, options) { this.type = type; this.detail = options.detail; } },
+      dispatchEvent: event => counts.push(event.detail.number),
+      console: { debug() {}, warn() {}, error() {} },
+    };
+    vm.runInNewContext(
+      fs.readFileSync(require.resolve('../../app/browser/tools/mutationTitle'), 'utf8'),
+      context
+    );
+    context.module.exports.init({ useMutationTitleLogic: true });
+    callback([]);
+    assert.deepStrictEqual(counts, expected === undefined ? [] : [expected]);
+  }
+});

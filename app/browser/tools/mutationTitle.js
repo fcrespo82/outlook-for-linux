@@ -53,7 +53,10 @@ class MutationObserverTitle {
         try {
           // Head-wide observation also reports style/meta/script churn;
           // only react when the <title> element itself is involved.
-          if (!this._involvesTitleElement(mutations)) {
+          const isOutlook = /^outlook\.(office\.com|office365\.com|cloud\.microsoft)$/.test(
+            globalThis.location?.hostname || ""
+          );
+          if (!isOutlook && !this._involvesTitleElement(mutations)) {
             return;
           }
 
@@ -69,7 +72,15 @@ class MutationObserverTitle {
           
           const regex = /^\((\d+)\)/;
           const match = regex.exec(sanitizedTitle);
-          const number = match ? Number.parseInt(match[1], 10) : 0;
+          let number = match ? Number.parseInt(match[1], 10) : 0;
+          if (isOutlook) {
+            const inbox = [...document.querySelectorAll('[data-folder-name]')].find(element =>
+              /^(inbox|caixa de entrada)$/i.test(element.getAttribute('data-folder-name') || '')
+            );
+            if (!inbox) return;
+            const unread = inbox.textContent.match(/(\d+)\s*(?:unread|não\s+lidas?)/i);
+            number = unread ? Number.parseInt(unread[1], 10) : 0;
+          }
 
           if (number === this.#lastNumber) {
             console.debug(`MutationTitle: Number unchanged (${number}), skipping event dispatch`);
@@ -105,7 +116,9 @@ class MutationObserverTitle {
       // misses in-place edits, leaving the badge stuck at a stale count
       // (#2620). The callback reads document.title, so it does not depend on
       // which <title> element currently holds the text.
-      observer.observe(globalThis.document.head, {
+      observer.observe(
+        /^outlook\./.test(globalThis.location?.hostname || "")
+          ? globalThis.document.documentElement : globalThis.document.head, {
         childList: true,
         characterData: true,
         subtree: true,

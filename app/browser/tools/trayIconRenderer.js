@@ -240,11 +240,13 @@ class TrayIconRenderer {
       ctx.textAlign = "center";
       ctx.fillStyle = "white";
 
+      const fontSize = newActivityCount > 9 ? 52 : 70
+
       // Scaled with the radius so the glyph keeps filling the badge.
       ctx.font =
-        `bold ${dotActive ? 52 : 70}px "Segoe UI","Helvetica Neue",Helvetica,Arial,sans-serif`;
+        `bold ${dotActive ? 52 : fontSize}px "Segoe UI","Helvetica Neue",Helvetica,Arial,sans-serif`;
       const baseline = badgeY + badgeRadius / 2;
-      if (newActivityCount > 9) {
+      if (newActivityCount > 99) {
         ctx.fillText("+", badgeX, baseline);
       } else {
         ctx.fillText(newActivityCount.toString(), badgeX, baseline);

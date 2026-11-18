@@ -160,7 +160,7 @@ jobs:
         run: |
           export E2E_USER_DATA_DIR="$(mktemp -d)"
           set +e
-          timeout 60 xvfb-run --auto-servernum dist/linux-unpacked/teams-for-linux --no-sandbox > smoke.log 2>&1
+          timeout 60 xvfb-run --auto-servernum dist/linux-unpacked/outlook-for-linux --no-sandbox > smoke.log 2>&1
           status=$?
           set -e
           cat smoke.log

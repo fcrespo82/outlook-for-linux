@@ -63,15 +63,9 @@ class NavigationButtons {
   // before it. Try the known data-tid first, then fall back to the search
   // landmark so a top-bar restructure does not drop the buttons entirely.
   #findInjectionAnchor() {
-    const selectors = [
-      '[data-tid="search-f6-navigation-region"]',
-      '[role="search"]',
-    ];
-    for (const selector of selectors) {
-      const el = document.querySelector(selector);
-      if (el?.parentNode) {
-        return el;
-      }
+    if (globalThis.location?.hostname?.startsWith("outlook.")) {
+      // Keep navigation beside the Outlook brand, outside the search column.
+      return document.getElementById("owaBranding_container")?.nextElementSibling;
     }
     return null;
   }

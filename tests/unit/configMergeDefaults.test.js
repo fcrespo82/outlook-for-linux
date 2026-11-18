@@ -69,11 +69,11 @@ describe('config mergeDefaults - applyObjectDefaults', () => {
 		assert.strictEqual(config.mqtt.brokerUrl, 'mqtt://x');
 	});
 
-	it('keeps msTeamsProtocols.v2 when only v1 is set', () => {
-		const config = { msTeamsProtocols: { v1: '^msteams:/l/' } };
+	it('keeps msOutlookProtocols.v2 when only v1 is set', () => {
+		const config = { msOutlookProtocols: { v1: '^msteams:/l/' } };
 		applyObjectDefaults(config, options);
-		assert.strictEqual(config.msTeamsProtocols.v1, '^msteams:/l/');
-		assert.strictEqual(config.msTeamsProtocols.v2, options.msTeamsProtocols.default.v2);
+		assert.strictEqual(config.msOutlookProtocols.v1, '^msteams:/l/');
+		assert.strictEqual(config.msOutlookProtocols.v2, options.msOutlookProtocols.default.v2);
 	});
 
 	it('coerces a dotted CLI boolean string against a boolean default', () => {
